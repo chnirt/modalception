@@ -1,79 +1,124 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Modalception
 
-# Getting Started
+A React Native component that enables nested modals, perfect for creating multi-level modal flows. You can easily control modal visibility and content at each level.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Installation
 
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
+To use Modalception in your project, first install the necessary dependencies:
 
 ```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+npm install Modalception
 ```
 
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
+or
 
 ```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+yarn add Modalception
 ```
 
-### For iOS
+## Usage
 
-```bash
-# using npm
-npm run ios
+### 1. Import the component
 
-# OR using Yarn
-yarn ios
+```tsx
+import Modalception from './Modalception'; // Adjust the import path based on where the component is located
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### 2. Create your modal content
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+Define the custom content you want to show in each modal. For example:
 
-## Step 3: Modifying your App
+```tsx
+const customContent1 = (
+  <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <Text style={{fontSize: 24, fontWeight: 'bold'}}>This is Modal 1</Text>
+    <Button
+      title="Open Modal 2"
+      onPress={() => {
+        modalRef.current?.show(customContent2);
+      }}
+    />
+  </SafeAreaView>
+);
+```
 
-Now that you have successfully run the app, let's modify it.
+### 3. Initialize <code>Modalception</code> in your component
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+Set up the modal in your app, passing the <code>ref</code> and optionally controlling the modal level and content.
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+```tsx
+import React, {useRef} from 'react';
+import {Button, SafeAreaView, Text} from 'react-native';
+import Modalception from './Modalception';
 
-## Congratulations! :tada:
+const App = () => {
+  const modalRef = useRef(null);
 
-You've successfully run and modified your React Native App. :partying_face:
+  const customContent2 = (
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <Text style={{fontSize: 24, fontWeight: 'bold'}}>This is Modal 2</Text>
+      <Button
+        title="Open Modal 3"
+        onPress={() => {
+          modalRef.current?.show(customContent3);
+        }}
+      />
+    </SafeAreaView>
+  );
 
-### Now what?
+  const customContent3 = (
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <Text style={{fontSize: 24, fontWeight: 'bold'}}>This is Modal 3</Text>
+      <Button
+        title="Close Modal 3"
+        onPress={() => {
+          modalRef.current?.hide();
+        }}
+      />
+    </SafeAreaView>
+  );
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+  return (
+    <SafeAreaView
+      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Button
+        title="Open Modal 1"
+        onPress={() => {
+          modalRef.current?.show(customContent1);
+        }}
+      />
+      <Modalception ref={modalRef} />
+    </SafeAreaView>
+  );
+};
 
-# Troubleshooting
+export default App;
+```
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+### 4. Control modal visibility
 
-# Learn More
+You can control the visibility of each modal by using the <code>show</code> and <codde>hide</code> methods.
 
-To learn more about React Native, take a look at the following resources:
+- show: To open the modal and display custom content.
+- hide: To close the modal.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+```tsx
+modalRef.current?.show(customContent); // Opens modal with custom content
+modalRef.current?.hide(); // Closes the modal
+```
+
+### 5. Customization
+
+You can customize the component by adjusting the <code>maxLevel</code> and <code>level</code> props. <code>maxLevel</code> limits how deep the modal can be nested, while <code>level</code> determines the current modal level.
+
+```tsx
+<Modalception ref={modalRef} level={1} maxLevel={3} />
+```
+
+## License
+
+MIT License
+
+---
+
+How does this look? Feel free to tweak it further as per your needs!
