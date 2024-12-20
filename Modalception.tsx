@@ -88,11 +88,13 @@ const Modalception = forwardRef<ModalceptionMethods, ModalceptionProps>(
           </View>
         </View>
 
-        <Modalception
-          ref={modalceptionRef}
-          level={level + 1} // Increment recursion level for nested modals
-          maxLevel={maxLevel} // Pass maxLevel to limit recursion depth
-        />
+        {isModalVisible ? (
+          <Modalception
+            ref={modalceptionRef}
+            level={level + 1} // Increment recursion level for nested modals
+            maxLevel={maxLevel} // Pass maxLevel to limit recursion depth
+          />
+        ) : null}
       </Modal>
     );
   },
